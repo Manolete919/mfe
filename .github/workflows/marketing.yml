@@ -1,14 +1,14 @@
 ---
-name: deploy-container
+name: deploy-marketing
 on:
   push:
     branches:
       - main
     paths:
-      - packages/container/**
+      - packages/marketing/**
 defaults:
   run:
-    working-directory: packages/container
+    working-directory: packages/marketing
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,8 +16,6 @@ jobs:
       - uses: actions/checkout@v2
       - run: npm install
       - run: npm run build
-        env:
-          PRODUCTION_DOMAIN: ${{ secrets.PRODUCTION_DOMAIN }}
       - name: Install OCI CLI
         run: >
           curl -L
@@ -41,11 +39,11 @@ jobs:
           oci setup repair-file-permissions --file ~/.oci/config
       - name: Upload dist/ to OCI Object Storage with correct MIME types
         run: |
-          PREFIX="container"
+          PREFIX="marketing"
           echo "Uploading dist/ with correct MIME types..."
           find dist -type f | while read file; do
             object_name="${file#dist/}"  # Remove 'dist/' prefix for object name
-            object_name="${PREFIX}/${object_name}"    # Add 'container/' prefix
+            object_name="${PREFIX}/${object_name}"    # Add 'marketing/' prefix
             content_type=$(file --mime-type -b "$file")  # Detect MIME type
 
             echo "Uploading $object_name with type $content_type"

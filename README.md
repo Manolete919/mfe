@@ -1,12 +1,67 @@
-## output
+# CREDENTIALS
+
+## Repository secrets
+
+[New repository secret](https://github.com/Manolete919/mfe/settings/secrets/actions/new)
+
+| Name                |
+| ------------------- |
+| `OCI_BUCKET_NAME`   |
+| `OCI_FINGERPRINT`   |
+| `OCI_NAMESPACE`     |
+| `OCI_PRIVATE_KEY`   |
+| `OCI_REGION`        |
+| `OCI_TENANCY_OCID`  |
+| `OCI_USER_OCID`     |
+| `PRODUCTION_DOMAIN` |
+
+# OCI BUCKET
+
+## Credential as secrets
+
+> OCI_PRIVATE_KEY
+
+```
+-----BEGIN PRIVATE KEY-----
+MIIBIjANBgkqhkiG9w0BAQE...
+...
+-----END PRIVATE KEY-----
+OCI_API_KEY
+```
+
+> add OCI_API_KEY at the end
+>
+> https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm
+
+### output
 
 > we need to upload the correct type
 
 ```bash
-Run echo "Uploading dist/ with correct MIME types..."
+Run mkdir -p ~/.oci
+  mkdir -p ~/.oci
+  echo "***
+ 
+  ***" > ~/.oci/oci_api_key.pem
+  chmod 600 ~/.oci/oci_api_key.pem
+  cat > ~/.oci/config <<EOF
+  [DEFAULT]
+  user=***
+  fingerprint=***
+  key_file=~/.oci/oci_api_key.pem
+  tenancy=***
+  region=***
+  EOF
+  oci setup repair-file-permissions --file ~/.oci/config
+  shell: /usr/bin/bash -e {0}
+4s
+
+Run PREFIX="container"
+  PREFIX="container"
   echo "Uploading dist/ with correct MIME types..."
   find dist -type f | while read file; do
     object_name="${file#dist/}"  # Remove 'dist/' prefix for object name
+    object_name="${PREFIX}/${object_name}"    # Add 'container/' prefix
     content_type=$(file --mime-type -b "$file")  # Detect MIME type
   
     echo "Uploading $object_name with type $content_type"
@@ -22,65 +77,65 @@ Run echo "Uploading dist/ with correct MIME types..."
   echo "✅ Upload complete."
   shell: /usr/bin/bash -e {0}
 Uploading dist/ with correct MIME types...
-Uploading 935.e13b300861b9ef25d3e1.js.LICENSE.txt with type text/plain
+Uploading container/935.e13b300861b9ef25d3e1.js.LICENSE.txt with type text/plain
 Uploading object
 {
-  "etag": "1528c237-6e84-4f1f-aa94-95c5c2986db1",
-  "last-modified": "Sat, 17 May 2025 20:28:20 GMT",
+  "etag": "ae528705-645b-4a07-b703-15c394088ab7",
+  "last-modified": "Sat, 17 May 2025 20:58:33 GMT",
   "opc-content-md5": "DAsGpMZqwJIh6FGVRfyPMQ=="
 }
-Uploading main.451f3fd90e6817ed8d18.js with type application/javascript
+Uploading container/main.451f3fd90e6817ed8d18.js with type application/javascript
 Uploading object
 {
-  "etag": "59f291ba-338d-404f-baae-f139842b7620",
-  "last-modified": "Sat, 17 May 2025 20:28:20 GMT",
+  "etag": "774cea4f-27c0-477d-b6cd-84ec8141204a",
+  "last-modified": "Sat, 17 May 2025 20:58:33 GMT",
   "opc-content-md5": "9Unlv5SAhOLVe3i2BEJERg=="
 }
-Uploading 294.0e87e067dfd35bf5739c.js.LICENSE.txt with type text/plain
+Uploading container/294.0e87e067dfd35bf5739c.js.LICENSE.txt with type text/plain
 Uploading object
 {
-  "etag": "9ac62db8-095c-4662-b9f1-3a07394adb5f",
-  "last-modified": "Sat, 17 May 2025 20:28:21 GMT",
+  "etag": "cde90dc3-b7f4-4a70-94bd-0fe258e4fccc",
+  "last-modified": "Sat, 17 May 2025 20:58:34 GMT",
   "opc-content-md5": "FrfCSwMhEJlBBDvxgtOWOQ=="
 }
-Uploading 228.94b469ddf973ab5fbd32.js with type application/javascript
+Uploading container/228.94b469ddf973ab5fbd32.js with type application/javascript
 Uploading object
 {
-  "etag": "fb495ee1-cc1e-4321-90cc-13e4ce6f6077",
-  "last-modified": "Sat, 17 May 2025 20:28:22 GMT",
+  "etag": "f451faa2-6112-42f1-ae7b-2246238cb233",
+  "last-modified": "Sat, 17 May 2025 20:58:35 GMT",
   "opc-content-md5": "9VTDUKiFj5k24nkHUfpupA=="
 }
-Uploading 294.0e87e067dfd35bf5739c.js with type application/javascript
+Uploading container/294.0e87e067dfd35bf5739c.js with type application/javascript
 Uploading object
 {
-  "etag": "802c9078-713c-4871-a12c-98326345ca44",
-  "last-modified": "Sat, 17 May 2025 20:28:22 GMT",
+  "etag": "1f618b3a-edbb-43eb-a266-fc7f93872d55",
+  "last-modified": "Sat, 17 May 2025 20:58:35 GMT",
   "opc-content-md5": "1wptmAAXiu/gCu33WsD5Uw=="
 }
-Uploading index.html with type text/html
+Uploading container/index.html with type text/html
 Uploading object
 {
-  "etag": "1510b925-1412-4926-85db-ba1dd64fb0b3",
-  "last-modified": "Sat, 17 May 2025 20:28:23 GMT",
-  "opc-content-md5": "H6NoAQ4Dpcs/JVxdr+bXaw=="
+  "etag": "0cb30ec1-6f7c-414a-bccf-2b8258de9331",
+  "last-modified": "Sat, 17 May 2025 20:58:36 GMT",
+  "opc-content-md5": "3eAStZvnPnTzx/0zUU06jg=="
 }
-Uploading 935.e13b300861b9ef25d3e1.js with type application/javascript
+Uploading container/935.e13b300861b9ef25d3e1.js with type application/javascript
 Uploading object
 {
-  "etag": "75e6de63-e28a-4d1f-83dc-9f4edcc47872",
-  "last-modified": "Sat, 17 May 2025 20:28:24 GMT",
+  "etag": "b4037d07-097b-4e32-8a08-cdfc7e5d16d3",
+  "last-modified": "Sat, 17 May 2025 20:58:36 GMT",
   "opc-content-md5": "aJOEYLDBmmuO9ZvDozciSA=="
 }
 ✅ Upload complete.
 ```
 
-# Test url
+## Test url
 
-```
-https://objectstorage.us-ashburn-1.oraclecloud.com/n/id6dibaakt36/b/MGARCIAR-IAD-OP-LAB02-1-BKT-01/o/index.html
+```bash
+https://objectstorage.us-ashburn-1.oraclecloud.com/n/id6dibaakt36/b/MGARCIAR-IAD-OP-LAB02-1-BKT-01/o/container/index.html
 ```
 
-# HTML (SRC JS)
+## HTML (SRC JS)
 
 ```html
 <!DOCTYPE html>
@@ -99,4 +154,36 @@ https://objectstorage.us-ashburn-1.oraclecloud.com/n/id6dibaakt36/b/MGARCIAR-IAD
 
 > The problem is, that main.451f3fd90e6817ed8d18.js, doesn't include the URL for the THML
 
-This should be:
+This should be: https://objectstorage.us-ashburn-1.oraclecloud.com/n/id6dibaakt36/b/MGARCIAR-IAD-OP-LAB02-1-BKT-01/o/container/main.451f3fd90e6817ed8d18.js
+
+# Webpack
+
+```json
+  output: {
+    // template for file names
+    // contenthash is used for cashing
+    filename: '[name].[contenthash].js',
+    // for aws
+    //publicPath: '/container/lastest'
+  },
+```
+
+## Errors
+
+```bash
+main.451f3fd90e6817ed8d18.js:1 Uncaught (in promise) ScriptExternalLoadError: Loading script failed.
+(error: http://undefined:9091/marketing/remoteEntry.js)
+while loading "./MarketingApp" from 839
+    at 839 (main.451f3fd90e6817ed8d18.js:1:123)
+    at i (main.451f3fd90e6817ed8d18.js:1:630)
+    at main.451f3fd90e6817ed8d18.js:1:3410
+    at i.I (main.451f3fd90e6817ed8d18.js:1:3570)
+    at main.451f3fd90e6817ed8d18.js:1:5207
+    at 271 (main.451f3fd90e6817ed8d18.js:1:5386)
+    at main.451f3fd90e6817ed8d18.js:1:5769
+    at Array.forEach (<anonymous>)
+    at i.f.consumes (main.451f3fd90e6817ed8d18.js:1:5599)
+    at main.451f3fd90e6817ed8d18.js:1:907
+```
+
+> This needs the other mfe apps
