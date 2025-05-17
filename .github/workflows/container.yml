@@ -42,7 +42,8 @@ jobs:
           PREFIX="container"
           echo "Uploading dist/ with correct MIME types..."
           find dist -type f | while read file; do
-            object_name="${PREFIX}/${object_name}"  # Remove 'dist/' prefix for object name
+            object_name="${file#dist/}"  # Remove 'dist/' prefix for object name
+            object_name="${PREFIX}/${object_name}"    # Add 'container/' prefix
             content_type=$(file --mime-type -b "$file")  # Detect MIME type
 
             echo "Uploading $object_name with type $content_type"
