@@ -39,9 +39,10 @@ jobs:
           oci setup repair-file-permissions --file ~/.oci/config
       - name: Upload dist/ to OCI Object Storage with correct MIME types
         run: |
+          PREFIX="container"
           echo "Uploading dist/ with correct MIME types..."
           find dist -type f | while read file; do
-            object_name="${file#dist/}"  # Remove 'dist/' prefix for object name
+            object_name="${PREFIX}/${object_name}"  # Remove 'dist/' prefix for object name
             content_type=$(file --mime-type -b "$file")  # Detect MIME type
 
             echo "Uploading $object_name with type $content_type"
