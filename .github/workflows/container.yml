@@ -36,6 +36,7 @@ jobs:
           tenancy=${{ secrets.OCI_TENANCY_OCID }}
           region=${{ secrets.OCI_REGION }}
           EOF
+          oci setup repair-file-permissions --file ~/.oci/config
       - name: Upload to OCI Object Storage
         run: |
           oci os object bulk-upload \
