@@ -39,16 +39,6 @@ jobs:
           oci setup repair-file-permissions --file ~/.oci/config
       - name: Upload dist/ to OCI Object Storage with correct MIME types
         run: |
-          # Delete existing objects
-          echo "Deleting existing objects in the bucket..."
-          oci os object list --bucket-name ${{ secrets.OCI_BUCKET_NAME }} --namespace ${{ secrets.OCI_NAMESPACE }} --all \
-            --query "data[].name" --raw-output | while read object_name; do
-              echo "Deleting: $object_name"
-              oci os object delete --bucket-name ${{ secrets.OCI_BUCKET_NAME }} \
-                                  --namespace ${{ secrets.OCI_NAMESPACE }} \
-                                  --name "$object_name" --force
-            done
-
           echo "Uploading dist/ with correct MIME types..."
           find dist -type f | while read file; do
             object_name="${file#dist/}"  # Remove 'dist/' prefix for object name
