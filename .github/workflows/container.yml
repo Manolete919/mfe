@@ -37,10 +37,32 @@ jobs:
           region=${{ secrets.OCI_REGION }}
           EOF
           oci setup repair-file-permissions --file ~/.oci/config
-      - name: Upload to OCI Object Storage
+      - name: Upload dist/ to OCI Object Storage with correct MIME types
         run: |
-          oci os object bulk-upload \
-            --bucket-name ${{ secrets.OCI_BUCKET_NAME }} \
-            --namespace ${{ secrets.OCI_NAMESPACE }} \
-            --src-dir dist \
-            --overwrite
+          # Delete existing objects
+          echo "Deleting existing objects in the bucket..."
+          oci os object list --bucket-name ${{ secrets.OCI_BUCKET_NAME }} --namespace ${{ secrets.OCI_NAMESPACE }} --all \
+            --query "data[].name" --raw-output | while read object_name; do
+              echo "Deleting: $object_name"
+              oci os object delete --bucket-name ${{ secrets.OCI_BUCKET_NAME }} \
+                                  --namespace ${{ secrets.OCI_NAMESPACE }} \
+                                  --name "$object_name" --force
+            done
+
+          echo "Uploading dist/ with correct MIME types..."
+          find dist -type f | while read file; do
+            object_name="${file#dist/}"  # Remove 'dist/' prefix for object name
+            content_type=$(file --mime-type -b "$file")  # Detect MIME type
+
+            echo "Uploading $object_name with type $content_type"
+            oci os object put \
+              --bucket-name ${{ secrets.OCI_BUCKET_NAME }} \
+              --namespace ${{ secrets.OCI_NAMESPACE }} \
+              --name "$object_name" \
+              --file "$file" \
+              --content-type "$content_type" \
+              --force
+          done
+
+          echo "✅ Upload complete."
+
