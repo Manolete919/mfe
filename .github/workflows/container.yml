@@ -42,21 +42,44 @@ jobs:
       - name: Upload dist/ to OCI Object Storage with correct MIME types
         run: |
           PREFIX="container"
+          BUCKET_NAME="${{ secrets.OCI_BUCKET_NAME }}"
+          NAMESPACE="${{ secrets.OCI_NAMESPACE }}"
+
+          # Step 1: Delete all objects with the given prefix in OCI bucket
+          echo "Deleting existing objects in bucket '$BUCKET_NAME' with prefix '$PREFIX/'..."
+
+          oci os object list \
+            --bucket-name "$BUCKET_NAME" \
+            --namespace "$NAMESPACE" \
+            --prefix "$PREFIX/" \
+            --all \
+            --query "data[].name" \
+            --raw-output | while read object_name; do
+              echo "Deleting $object_name"
+              oci os object delete \
+                --bucket-name "$BUCKET_NAME" \
+                --namespace "$NAMESPACE" \
+                --name "$object_name" \
+                --force
+          done
+
+          echo "Old objects with prefix '$PREFIX/' deleted."
+
+          # Step 2: Upload new files from dist/
           echo "Uploading dist/ with correct MIME types..."
+
           find dist -type f | while read file; do
             object_name="${file#dist/}"  # Remove 'dist/' prefix for object name
-            object_name="${PREFIX}/${object_name}"    # Add 'container/' prefix
+            object_name="${PREFIX}/${object_name}"    # Add 'marketing/' prefix
             content_type=$(file --mime-type -b "$file")  # Detect MIME type
 
             echo "Uploading $object_name with type $content_type"
             oci os object put \
-              --bucket-name ${{ secrets.OCI_BUCKET_NAME }} \
-              --namespace ${{ secrets.OCI_NAMESPACE }} \
+              --bucket-name "$BUCKET_NAME" \
+              --namespace "$NAMESPACE" \
               --name "$object_name" \
               --file "$file" \
               --content-type "$content_type" \
               --force
           done
-
-          echo "✅ Upload complete."
-
+          echo "? Upload complete."
