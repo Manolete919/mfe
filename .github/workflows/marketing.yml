@@ -52,7 +52,7 @@ jobs:
             --prefix "$PREFIX/" \
             --all \
             --query "data[].name" \
-            --raw-output | while read object_name; do
+            --raw-output | grep -v '^\[' | grep -v '^\]' | while read object_name; do
               echo "Deleting $object_name"
               oci os object delete \
                 --bucket-name "$BUCKET_NAME" \
