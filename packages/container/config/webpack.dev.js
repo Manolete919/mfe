@@ -5,6 +5,9 @@ const commonConfig = require('./webpack.common');
 
 const devConfig = {
   mode: "development",
+  output: {
+    publicPath: 'http://localhost:9090/',
+  },
   devServer: {
     port: 9090,
     historyApiFallback: {
