@@ -42,7 +42,24 @@ jobs:
           PREFIX="marketing"
           BUCKET_NAME="${{ secrets.OCI_BUCKET_NAME }}"
           NAMESPACE="${{ secrets.OCI_NAMESPACE }}"
-       
+          # Step 1: Delete all objects with the given prefix in OCI bucket
+          echo "Deleting existing objects in bucket '$BUCKET_NAME' with prefix '$PREFIX/'..."
+
+          oci os object list \
+            -bucket-name "$BUCKET_NAME" \
+            --namespace "$NAMESPACE" \
+            --prefix "$PREFIX/" \
+            --all \
+            --query "data[].name" \
+            --raw-output | \
+            sed 's/[",]//g' | grep -vE '^\[|\]$' | while read -r object; do
+              echo "Deleting: $object"
+            oci os object delete \
+            --bucket-name "$BUCKET_NAME" \
+            --namespace "$NAMESPACE" \
+            --name "$object" \
+            --force
+          done
 
           # Step 2: Upload new files from dist/
           echo "Uploading dist/ with correct MIME types..."
