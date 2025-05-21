@@ -1,0 +1,64 @@
+---
+name: deploy-auth
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - packages/auth/**
+defaults:
+  run:
+    working-directory: packages/auth
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm install
+      - run: npm run build
+      - name: Install OCI CLI
+        run: >
+          curl -L
+          https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh
+          | bash -s -- --accept-all-defaults
+
+          echo "$HOME/bin" >> $GITHUB_PATH
+      - name: Configure OCI CLI
+        run: |
+          mkdir -p ~/.oci
+          echo "${{ secrets.OCI_PRIVATE_KEY }}" > ~/.oci/oci_api_key.pem
+          chmod 600 ~/.oci/oci_api_key.pem
+          cat > ~/.oci/config <<EOF
+          [DEFAULT]
+          user=${{ secrets.OCI_USER_OCID }}
+          fingerprint=${{ secrets.OCI_FINGERPRINT }}
+          key_file=~/.oci/oci_api_key.pem
+          tenancy=${{ secrets.OCI_TENANCY_OCID }}
+          region=${{ secrets.OCI_REGION }}
+          EOF
+          oci setup repair-file-permissions --file ~/.oci/config
+      - name: Upload dist/ to OCI Object Storage with correct MIME types
+        run: |
+          PREFIX="auth"
+          BUCKET_NAME="${{ secrets.OCI_BUCKET_NAME }}"
+          NAMESPACE="${{ secrets.OCI_NAMESPACE }}"
+       
+
+          # Step 2: Upload new files from dist/
+          echo "Uploading dist/ with correct MIME types..."
+
+          find dist -type f | while read file; do
+            object_name="${file#dist/}"  # Remove 'dist/' prefix for object name
+            object_name="${PREFIX}/${object_name}"    # Add 'auth/' prefix
+            content_type=$(file --mime-type -b "$file")  # Detect MIME type
+
+            echo "Uploading $object_name with type $content_type"
+            oci os object put \
+              --bucket-name "$BUCKET_NAME" \
+              --namespace "$NAMESPACE" \
+              --name "$object_name" \
+              --file "$file" \
+              --content-type "$content_type" \
+              --force
+          done
+           echo "? Upload complete."
