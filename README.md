@@ -73,6 +73,9 @@ webpack 5.88.0 compiled successfully in 3182 ms
 | `OCI_USER_OCID`     |
 | `PRODUCTION_DOMAIN` |
 
+PRODUCTION_DOMAIN : (APIGATEWAY URL - https://e7fqri2v3weyzypanm6vzgqtmu.apigateway.us-ashburn-1.oci.customer-oci.com)
+OCI_BUCKET_NAME: A public bucket (MGARCIAR-IAD-OP-LAB02-1-BKT-0)
+The rest of information provided should use a use a user with admin privileges or policies, about uploading/deleting files into the bucket.
 # OCI BUCKET
 
 ## Credential as secrets
@@ -270,6 +273,8 @@ This should be: https://objectstorage.us-ashburn-1.oraclecloud.com/n/id6dibaakt3
     publicPath: '/container/lastest/'
   },
 ```
+# Reverse Proxy
+OCI APIGATEWAY to bucket
 
 ## Route 1
 
