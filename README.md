@@ -168,50 +168,110 @@ This should be: https://objectstorage.us-ashburn-1.oraclecloud.com/n/id6dibaakt3
   },
 ```
 
-## Errors
+## Route 1
 
-```bash
-main.451f3fd90e6817ed8d18.js:1 Uncaught (in promise) ScriptExternalLoadError: Loading script failed.
-(error: http://undefined:9091/marketing/remoteEntry.js)
-while loading "./MarketingApp" from 839
-    at 839 (main.451f3fd90e6817ed8d18.js:1:123)
-    at i (main.451f3fd90e6817ed8d18.js:1:630)
-    at main.451f3fd90e6817ed8d18.js:1:3410
-    at i.I (main.451f3fd90e6817ed8d18.js:1:3570)
-    at main.451f3fd90e6817ed8d18.js:1:5207
-    at 271 (main.451f3fd90e6817ed8d18.js:1:5386)
-    at main.451f3fd90e6817ed8d18.js:1:5769
-    at Array.forEach (<anonymous>)
-    at i.f.consumes (main.451f3fd90e6817ed8d18.js:1:5599)
-    at main.451f3fd90e6817ed8d18.js:1:907
+### path
+
+```
+/{anypath*}
 ```
 
-> This needs the other mfe apps
+### Methods
 
-## Troubleshooting
-
-> curl -I "https://objectstorage.us-ashburn-1.oraclecloud.com/n/id6dibaakt36/b/MGARCIAR-IAD-OP-LAB02-1-BKT-01/o/marketing%2FremoteEntry.js"
-
-output
-
-```bash
-HTTP/1.1 200 OK
-accept-ranges: bytes
-Content-Length: 5967
-content-md5: 53uM36dy13MW2Ns25ujxUA==
-last-modified: Sat, 17 May 2025 22:06:29 GMT
-etag: 0995a6a2-e452-4949-98d0-9a104af2cd73
-version-id: 5536de97-28b3-4e58-bc0d-d28ae66245d0
-storage-tier: Standard
-Content-Type: application/javascript
-date: Sat, 17 May 2025 22:10:43 GMT
-opc-request-id: iad-1:2QCfEWOsU_iiMQ2SYDklewDczHOkOo5JVmx4cD0ufByFexACMhZ5f-7ecHUa2Rhk
-x-api-id: native
-x-content-type-options: nosniff
-strict-transport-security: max-age=31536000; includeSubDomains
-access-control-allow-origin: *
-access-control-allow-methods: POST,PUT,GET,HEAD,DELETE,OPTIONS
-access-control-allow-credentials: true
-access-control-expose-headers: accept-ranges,access-control-allow-credentials,access-control-allow-methods,access-control-allow-origin,content-length,content-md5,content-type,date,etag,last-modified,opc-client-info,opc-request-id,storage-tier,strict-transport-security,version-id,x-api-id,x-content-type-options
+```
+GET
 ```
 
+### URL
+
+```
+https://objectstorage.us-ashburn-1.oraclecloud.com/n/id6dibaakt36/b/MGARCIAR-IAD-OP-LAB02-1-BKT-01/o/container/latest/index.html
+```
+
+### CORS
+
+```
+Allowed origins:*
+Allowed methods:*
+```
+
+## Route 2
+
+### path
+
+```
+/container/latest/{files}
+```
+
+### Methods
+
+```
+GET
+```
+
+### URL
+
+```
+https://objectstorage.us-ashburn-1.oraclecloud.com/n/id6dibaakt36/b/MGARCIAR-IAD-OP-LAB02-1-BKT-01/o/container/latest/${request.path[files]}
+```
+
+### CORS
+
+```
+Allowed origins:*
+Allowed methods:*
+```
+
+## Route 3
+
+### path
+
+```
+/auth/latest/{files}
+```
+
+### Methods
+
+```
+GET
+```
+
+### URL
+
+```
+https://objectstorage.us-ashburn-1.oraclecloud.com/n/id6dibaakt36/b/MGARCIAR-IAD-OP-LAB02-1-BKT-01/o/auth/latest/${request.path[files]}
+```
+
+### CORS
+
+```
+Allowed origins:*
+Allowed methods:*
+```
+
+## Route 4
+
+### path
+
+```
+/marketing/latest/{files}
+```
+
+### Methods
+
+```
+GET
+```
+
+### URL
+
+```
+https://objectstorage.us-ashburn-1.oraclecloud.com/n/id6dibaakt36/b/MGARCIAR-IAD-OP-LAB02-1-BKT-01/o/marketing/latest/${request.path[files]}
+```
+
+### CORS
+
+```
+Allowed origins:*
+Allowed methods:*
+```
