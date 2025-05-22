@@ -90,7 +90,7 @@ OCI_API_KEY
 > add OCI_API_KEY at the end
 >
 > https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm
-
+```
 ### output
 
 Run PREFIX="marketing/latest"
