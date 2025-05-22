@@ -1,7 +1,7 @@
 # TEST
 This applications uses 4 apps, marketing, auth, container and dashboard. The next steps are required. Each applications spits out the url in which is running on. For example in development mode. It uses github actions for production in oci cloud. 
 http://localhost:9090/; http://localhost:9091/; http://localhost:9092/; http://localhost:9093/
-```
+```bash
 cd /home/opc/microfrontend/mfe/packages/marketing
 npm i
 
@@ -17,7 +17,7 @@ npm i
 npm start
 ```
 output
-```
+```bash
 home/opc/microfrontend/mfe/packages/marketing
 [opc@vm-training-mgr marketing]$ ^C
 [opc@vm-training-mgr marketing]$ npm start
