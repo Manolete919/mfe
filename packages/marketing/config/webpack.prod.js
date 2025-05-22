@@ -9,7 +9,7 @@ const prodConfig = {
     // template for file names
     // contenthash is used for cashing
     filename: '[name].[contenthash].js',
-    publicPath: '/marketing/',
+    publicPath: '/marketing/latest/',
   },
   plugins: [
     new ModuleFederationPlugin({
