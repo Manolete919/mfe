@@ -39,7 +39,7 @@ jobs:
           oci setup repair-file-permissions --file ~/.oci/config
       - name: Upload dist/ to OCI Object Storage with correct MIME types
         run: |
-          PREFIX="auth"
+          PREFIX="auth/latest"
           BUCKET_NAME="${{ secrets.OCI_BUCKET_NAME }}"
           NAMESPACE="${{ secrets.OCI_NAMESPACE }}"
        

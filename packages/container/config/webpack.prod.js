@@ -10,14 +10,14 @@ const prodConfig = {
     // template for file names
     // contenthash is used for cashing
     filename: '[name].[contenthash].js',
-    publicPath: '/container/',
+    publicPath: '/container/latest/',
   },
   plugins: [
     new ModuleFederationPlugin({
       name: "container",
       remotes: {
-        marketing: `marketing@${domain}/marketing/remoteEntry.js`,
-        auth: `auth@${domain}/auth/remoteEntry.js`,
+        marketing: `marketing@${domain}/marketing/latest/remoteEntry.js`,
+        auth: `auth@${domain}/auth/latest/remoteEntry.js`,
       },
       shared: packageJson.dependencies
     })
