@@ -266,8 +266,8 @@ This should be: https://objectstorage.us-ashburn-1.oraclecloud.com/n/id6dibaakt3
     // template for file names
     // contenthash is used for cashing
     filename: '[name].[contenthash].js',
-    // for aws
-    //publicPath: '/container/lastest'
+    // for aws or oci, to avoid conflicts with url path
+    publicPath: '/container/lastest/'
   },
 ```
 
